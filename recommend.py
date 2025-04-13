@@ -14,7 +14,7 @@ class RecommendationEngine:
         2. Global Trending: Include some of the overall most popular products.
         Then merge these lists to create a hybrid set.
         """
-        # 1. Diversity-based recommendation: get one top product per category
+        
         grouped = self.products.groupby('category', as_index=False).apply(
             lambda df: df.sort_values("popularity_score", ascending=False).iloc[0]
         ).reset_index(drop=True)
