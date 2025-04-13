@@ -32,7 +32,6 @@ This recommendation engine employs a hybrid approach by combining:
 - **Usage:**  
   The updated profile is used to personalize subsequent recommendations by boosting items that match the user's demonstrated interests. A basic Matplotlib bar chart visualizes the category preferences, showing how the profile evolves over time.
 
-
 ## Execution
 1. Ensure that **products.csv**, **users.csv**, and **recommend.py** are in the same directory.
 2. Run the script using:
