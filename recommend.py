@@ -6,16 +6,30 @@ class RecommendationEngine:
     def __init__(self, products_path='products.csv', users_path='users.csv'):
         self.products = pd.read_csv(products_path)
         self.users = pd.read_csv(users_path)
-
+    
     def get_initial_recommendations(self, top_n=5):
-        trending = self.products.sort_values(by='popularity_score', ascending=False).head(top_n)
-        clicks = self.users[self.users['interaction'] == 'click']
-        product_clicks = clicks.groupby('product_id').size().reset_index(name='click_count')
-        merged = pd.merge(self.products, product_clicks, on='product_id', how='left')
-        merged['click_count'] = merged['click_count'].fillna(0)
-        collaborative = merged.sort_values(by=['click_count', 'popularity_score'], ascending=False).head(top_n)
-        hybrid = pd.concat([trending, collaborative]).drop_duplicates(subset='product_id').reset_index(drop=True)
-        return hybrid
+        """
+        Generate diverse cold-start recommendations by combining:
+        1. Diversity: Pick the highest-scored product from each category.
+        2. Global Trending: Include some of the overall most popular products.
+        Then merge these lists to create a hybrid set.
+        """
+        # 1. Diversity-based recommendation: get one top product per category
+        grouped = self.products.groupby('category', as_index=False).apply(
+            lambda df: df.sort_values("popularity_score", ascending=False).iloc[0]
+        ).reset_index(drop=True)
+        diverse = grouped.sort_values("popularity_score", ascending=False)
+        
+        diverse_recs = diverse.head(top_n)
+        
+        trending = self.products.sort_values("popularity_score", ascending=False).head(top_n)
+        
+        hybrid = pd.concat([diverse_recs, trending]).drop_duplicates(subset="product_id").reset_index(drop=True)
+        
+        final_recs = hybrid.head(top_n)
+        return final_recs
+
+
 
     def update_user_profile(self, selected_product_ids):
         profile = defaultdict(lambda: Counter())
