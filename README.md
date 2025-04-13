@@ -8,7 +8,7 @@ This recommendation engine employs a hybrid approach by combining:
 
 ## Content Filtering Logic
 - **Attributes & Scoring:**  
-  Each product includes a *category*, comma-separated *tags*, and a *popularity score*. During personalized recommendation, a product’s score starts with its inherent popularity. An extra boost (5 points per occurrence) is applied for every tag that matches the user's preferred tags.  
+  Each product includes a *category*, comma-separated *tags*, and a *popularity score*. During personalized recommendation, a product’s score starts with its inherent popularity. An extra boost (5 points per occurrence) is applied for every tag that matches the user's preferred tags.
 - **Purpose:**  
   This mechanism ensures that products aligning with the user's tastes (as expressed by the selected product attributes) are prioritized while still considering overall product popularity.
 
@@ -32,6 +32,16 @@ This recommendation engine employs a hybrid approach by combining:
 - **Usage:**  
   The updated profile is used to personalize subsequent recommendations by boosting items that match the user's demonstrated interests. A basic Matplotlib bar chart visualizes the category preferences, showing how the profile evolves over time.
 
+## Personalized Recommendation Logic
+- **Diverse Initial Recommendations:**  
+  Initially, the engine provides a diverse set of recommendations by selecting top products from each category along with global trending items.
+- **Focused Recommendations on User Selection:**  
+  When a user selects products predominantly from the "Electronics" category (or any dominant category), the engine tailors the personalized recommendations to include:
+  - **Group A (Primary):** The majority of recommended items come from the chosen category (e.g., Electronics).
+  - **Group B (Supplementary):** A smaller subset of recommendations consists of products from other categories that share similar tag attributes with the dominant category.
+  
+  This approach ensures that the updated recommendations are mostly focused on the user's primary interest, while still offering a hint of diversity with similar styled or feature-related items.
+
 ## Execution
 1. Ensure that **products.csv**, **users.csv**, and **recommend.py** are in the same directory.
 2. Run the script using:
@@ -39,4 +49,4 @@ This recommendation engine employs a hybrid approach by combining:
     python recommend.py
     ```
 3. Follow the interactive prompts to enter product IDs you like for each simulated user session.
-4. The script displays initial recommendations, updates user profiles (with visualization), and shows personalized recommendations for each session.
+4. The script displays initial recommendations (diverse across categories), updates user profiles (with visualization), and shows personalized recommendations (primarily focused on the selected category with a small mix of similar items).
